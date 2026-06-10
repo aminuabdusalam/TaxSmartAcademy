@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#059669">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>TaxSmart Academy</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Top Bar -->
+    <header id="top-bar">
+      <button id="back-btn" class="icon-btn hidden" aria-label="Go back">←</button>
+      <h1 id="page-title">TaxSmart Academy</h1>
+      <div id="progress-display" class="progress-badge">
+        <span id="progress-count">0</span>/8
+      </div>
+    </header>
+
+    <main id="main-content">
+
+      <!-- Dashboard -->
+      <section id="view-dashboard" class="view active">
+        <div class="dashboard-hero">
+          <div class="hero-icon">💰</div>
+          <h2>TaxSmart Academy</h2>
+          <p class="hero-subtitle">Master your tax-advantaged accounts & optimize your paycheck</p>
+          <div class="progress-ring-container">
+            <div class="progress-ring" id="main-progress-ring">
+              <span id="main-progress-pct">0%</span>
+            </div>
+            <p class="progress-label" id="progress-label">0 of 8 chapters completed</p>
+          </div>
+        </div>
+
+        <div class="section-header"><h3>Continue Learning</h3></div>
+        <div id="next-chapter-card" class="next-chapter-card"></div>
+
+        <div class="quick-actions">
+          <button class="quick-action-btn" id="qa-calculator">
+            <span class="qa-icon">🧮</span>
+            <span class="qa-label">Paycheck Calculator</span>
+          </button>
+          <button class="quick-action-btn" id="qa-chapters">
+            <span class="qa-icon">📚</span>
+            <span class="qa-label">All Chapters</span>
+          </button>
+        </div>
+
+        <div class="section-header"><h3>Quick Stats</h3></div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-number" id="stat-quizzes">0</span>
+            <span class="stat-label">Quizzes Passed</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number" id="stat-score">—</span>
+            <span class="stat-label">Avg Score</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chapters List -->
+      <section id="view-chapters" class="view">
+        <div class="chapter-list" id="chapter-list"></div>
+      </section>
+
+      <!-- Chapter Content -->
+      <section id="view-content" class="view">
+        <div class="chapter-content" id="chapter-content"></div>
+        <div class="content-actions">
+          <button class="btn btn-primary btn-lg" id="btn-take-quiz">Take the Quiz →</button>
+        </div>
+      </section>
+
+      <!-- Quiz -->
+      <section id="view-quiz" class="view">
+        <div class="quiz-header">
+          <h2 id="quiz-title">Quiz</h2>
+          <div class="quiz-progress">
+            <span id="quiz-question-num">1</span> / <span id="quiz-total">3</span>
+          </div>
+        </div>
+        <div class="quiz-progress-bar-container">
+          <div class="quiz-progress-bar" id="quiz-progress-bar"></div>
+        </div>
+        <div id="quiz-question-area">
+          <p class="quiz-question" id="quiz-question-text"></p>
+          <div class="quiz-options" id="quiz-options"></div>
+        </div>
+        <div id="quiz-feedback" class="quiz-feedback hidden"></div>
+        <button class="btn btn-primary btn-lg" id="btn-quiz-next">Next Question →</button>
+      </section>
+
+      <!-- Quiz Results -->
+      <section id="view-quiz-results" class="view">
+        <div class="results-container">
+          <div class="results-icon" id="results-icon">🎉</div>
+          <h2 id="results-title">Great Job!</h2>
+          <p class="results-score" id="results-score"></p>
+          <div class="results-actions">
+            <button class="btn btn-primary btn-lg" id="btn-results-continue">Continue →</button>
+            <button class="btn btn-outline" id="btn-results-retry">Retry Quiz</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Calculator -->
+      <section id="view-calculator" class="view">
+        <h2 class="calc-title">🧮 Paycheck Calculator</h2>
+        <p class="calc-subtitle">See how contributions affect your take-home pay</p>
+
+        <div class="calc-tabs">
+          <button class="calc-tab active" data-tab="contributions">Set Contributions</button>
+          <button class="calc-tab" data-tab="target">Target Take-Home</button>
+        </div>
+
+        <!-- Contributions → Take-Home -->
+        <div class="calc-panel active" id="panel-contributions">
+          <div class="calc-card">
+            <label class="calc-label">Annual Base Salary</label>
+            <div class="input-group">
+              <span class="input-prefix">$</span>
+              <input type="number" id="calc-salary" value="200000" min="0" step="1000">
+            </div>
+          </div>
+
+          <div class="calc-card">
+            <label class="calc-label">Traditional 401(k) <span class="limit-tag">Max $23,500</span></label>
+            <div class="slider-group">
+              <input type="range" id="slider-trad401k" min="0" max="23500" step="100" value="23500">
+              <div class="slider-value">$<span id="val-trad401k">23,500</span>/yr</div>
+            </div>
+          </div>
+
+          <div class="calc-card">
+            <label class="calc-label">Roth 401(k) <span class="limit-tag">Combined max $23,500</span></label>
+            <div class="slider-group">
+              <input type="range" id="slider-roth401k" min="0" max="23500" step="100" value="0">
+              <div class="slider-value">$<span id="val-roth401k">0</span>/yr</div>
+            </div>
+          </div>
+
+          <div class="calc-card">
+            <label class="calc-label">After-Tax 401(k) <span class="limit-tag">Mega Backdoor Roth</span></label>
+            <div class="slider-group">
+              <input type="range" id="slider-aftertax401k" min="0" max="46500" step="100" value="0">
+              <div class="slider-value">$<span id="val-aftertax401k">0</span>/yr</div>
+            </div>
+          </div>
+
+          <div class="calc-card">
+            <label class="calc-label">HSA <span class="limit-tag">Max $4,300</span></label>
+            <div class="slider-group">
+              <input type="range" id="slider-hsa" min="0" max="4300" step="50" value="4300">
+              <div class="slider-value">$<span id="val-hsa">4,300</span>/yr</div>
+            </div>
+          </div>
+
+          <div class="calc-card">
+            <label class="calc-label">FSA <span class="limit-tag">Max $3,300</span></label>
+            <div class="slider-group">
+              <input type="range" id="slider-fsa" min="0" max="3300" step="50" value="0">
+              <div class="slider-value">$<span id="val-fsa">0</span>/yr</div>
+            </div>
+          </div>
+
+          <div class="calc-card">
+            <label class="calc-label">ESPP Contribution <span class="limit-tag">1–15% of base</span></label>
+            <div class="slider-group">
+              <input type="range" id="slider-espp" min="0" max="15" step="1" value="10">
+              <div class="slider-value"><span id="val-espp">10</span>%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Target Take-Home -->
+        <div class="calc-panel" id="panel-target">
+          <div class="calc-card">
+            <label class="calc-label">Annual Base Salary</label>
+            <div class="input-group">
+              <span class="input-prefix">$</span>
+              <input type="number" id="calc-salary-target" value="200000" min="0" step="1000">
+            </div>
+          </div>
+          <div class="calc-card">
+            <label class="calc-label">Desired Monthly Take-Home</label>
+            <div class="input-group">
+              <span class="input-prefix">$</span>
+              <input type="number" id="calc-target-takehome" value="7000" min="0" step="100">
+            </div>
+          </div>
+          <button class="btn btn-primary" id="btn-calc-target">Calculate Contributions →</button>
+          <div id="target-result" class="target-result hidden"></div>
+        </div>
+
+        <!-- Results -->
+        <div class="calc-results" id="calc-results">
+          <h3>📊 Paycheck Breakdown</h3>
+          <div class="result-row header-row">
+            <span>Item</span>
+            <span>Per Paycheck</span>
+            <span>Annual</span>
+          </div>
+          <div id="result-rows"></div>
+          <div class="tax-savings-box" id="tax-savings-box"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Bottom Nav -->
+    <nav id="bottom-nav">
+      <button class="nav-btn active" data-view="dashboard">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">Home</span>
+      </button>
+      <button class="nav-btn" data-view="chapters">
+        <span class="nav-icon">📚</span>
+        <span class="nav-label">Learn</span>
+      </button>
+      <button class="nav-btn" data-view="calculator">
+        <span class="nav-icon">🧮</span>
+        <span class="nav-label">Calculator</span>
+      </button>
+    </nav>
+  </div>
+
+  <script src="data.js"></script>
+  <script>
+  // ===== TaxSmart Academy - App Logic =====
+  (function() {
+    'use strict';
+
+    const STORAGE_KEY = 'tsa_state';
+    let state, currentChapter, currentQuiz, quizIndex, quizScore, quizAnswers;
+
+    // --- State Management ---
+    function getDefaultState() {
+      return { chaptersRead: [], chaptersCompleted: [], quizScores: {} };
+    }
+    function loadState() {
+      try {
+        const s = localStorage.getItem(STORAGE_KEY);
+        state = s ? JSON.parse(s) : getDefaultState();
+      } catch(e) { state = getDefaultState(); }
+      if (!state.chaptersRead) state.chaptersRead = [];
+      if (!state.chaptersCompleted) state.chaptersCompleted = [];
+      if (!state.quizScores) state.quizScores = {};
+    }
+    function saveState() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+    }
+
+    // --- Navigation ---
+    function showView(viewId) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      const view = document.getElementById('view-' + viewId);
+      if (view) view.classList.add('active');
+
+      // Update nav
+      document.querySelectorAll('.nav-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.view === viewId);
+      });
+
+      const backBtn = document.getElementById('back-btn');
+      const title = document.getElementById('page-title');
+
+      if (viewId === 'dashboard') {
+        backBtn.classList.add('hidden');
+        title.textContent = 'TaxSmart Academy';
+        renderDashboard();
+      } else if (viewId === 'chapters') {
+        backBtn.classList.remove('hidden');
+        title.textContent = 'Chapters';
+        renderChapterList();
+      } else if (viewId === 'calculator') {
+        backBtn.classList.remove('hidden');
+        title.textContent = 'Calculator';
+        recalculate();
+      } else if (viewId === 'content') {
+        backBtn.classList.remove('hidden');
+      } else if (viewId === 'quiz') {
+        backBtn.classList.remove('hidden');
+      } else if (viewId === 'quiz-results') {
+        backBtn.classList.add('hidden');
+      }
+
+      // Update progress badge
+      document.getElementById('progress-count').textContent = state.chaptersCompleted.length;
+      window.scrollTo(0, 0);
+    }
+
+    // --- Dashboard ---
+    function renderDashboard() {
+      const total = CHAPTERS.length;
+      const completed = state.chaptersCompleted.length;
+      const pct = Math.round((completed / total) * 100);
+
+      document.getElementById('main-progress-pct').textContent = pct + '%';
+      document.getElementById('progress-label').textContent = completed + ' of ' + total + ' chapters completed';
+
+      const ring = document.getElementById('main-progress-ring');
+      ring.style.background = 'conic-gradient(#059669 ' + (pct * 3.6) + 'deg, #e5e7eb ' + (pct * 3.6) + 'deg)';
+
+      // Next chapter card
+      const nextCard = document.getElementById('next-chapter-card');
+      const nextChapter = CHAPTERS.find(c => !state.chaptersCompleted.includes(c.id));
+      if (nextChapter) {
+        const isRead = state.chaptersRead.includes(nextChapter.id);
+        nextCard.innerHTML = '<div class="next-ch-info">' +
+          '<span class="next-ch-icon">' + nextChapter.icon + '</span>' +
+          '<div><strong>Chapter ' + nextChapter.id + ': ' + nextChapter.title + '</strong>' +
+          '<p>' + (isRead ? 'Ready for quiz!' : nextChapter.description) + '</p></div>' +
+          '</div><span class="next-ch-arrow">→</span>';
+        nextCard.onclick = function() { openChapter(nextChapter.id); };
+      } else {
+        nextCard.innerHTML = '<div class="next-ch-info"><span class="next-ch-icon">🎉</span>' +
+          '<div><strong>All Complete!</strong><p>You\'ve mastered all chapters.</p></div></div>';
+        nextCard.onclick = null;
+      }
+
+      // Stats
+      const quizCount = Object.keys(state.quizScores).length;
+      document.getElementById('stat-quizzes').textContent = quizCount;
+      if (quizCount > 0) {
+        const scores = Object.values(state.quizScores);
+        const avg = Math.round(scores.reduce((a,b) => a + b, 0) / scores.length);
+        document.getElementById('stat-score').textContent = avg + '%';
+      } else {
+        document.getElementById('stat-score').textContent = '—';
+      }
+    }
+
+    // --- Chapter List ---
+    function renderChapterList() {
+      const list = document.getElementById('chapter-list');
+      list.innerHTML = '';
+      CHAPTERS.forEach(function(ch) {
+        const isCompleted = state.chaptersCompleted.includes(ch.id);
+        const isRead = state.chaptersRead.includes(ch.id);
+        const score = state.quizScores[ch.id];
+        let statusIcon = '🔒';
+        let statusClass = '';
+        if (isCompleted) { statusIcon = '✅'; statusClass = 'completed'; }
+        else if (isRead) { statusIcon = '📖'; statusClass = 'in-progress'; }
+        else { statusIcon = ch.icon; statusClass = ''; }
+
+        const card = document.createElement('div');
+        card.className = 'chapter-card ' + statusClass;
+        card.innerHTML = '<div class="ch-icon">' + statusIcon + '</div>' +
+          '<div class="ch-info"><h3>Chapter ' + ch.id + ': ' + ch.title + '</h3>' +
+          '<p>' + ch.description + '</p>' +
+          (score !== undefined ? '<span class="ch-score">Quiz: ' + score + '%</span>' : '') +
+          '</div><span class="ch-arrow">→</span>';
+        card.addEventListener('click', function() { openChapter(ch.id); });
+        list.appendChild(card);
+      });
+    }
+
+    // --- Chapter Content ---
+    function openChapter(id) {
+      currentChapter = CHAPTERS.find(c => c.id === id);
+      if (!currentChapter) return;
+
+      document.getElementById('page-title').textContent = 'Ch. ' + id;
+      document.getElementById('chapter-content').innerHTML = currentChapter.content;
+
+      if (!state.chaptersRead.includes(id)) {
+        state.chaptersRead.push(id);
+        saveState();
+      }
+
+      const quizBtn = document.getElementById('btn-take-quiz');
+      if (currentChapter.quiz && currentChapter.quiz.length > 0) {
+        quizBtn.style.display = 'block';
+        quizBtn.textContent = state.chaptersCompleted.includes(id) ? 'Retake Quiz →' : 'Take the Quiz →';
+      } else {
+        quizBtn.style.display = 'none';
+      }
+
+      showView('content');
+    }
+
+    // --- Quiz Engine ---
+    function startQuiz() {
+      if (!currentChapter || !currentChapter.quiz) return;
+      currentQuiz = currentChapter.quiz;
+      quizIndex = 0;
+      quizScore = 0;
+      quizAnswers = [];
+      document.getElementById('quiz-title').textContent = currentChapter.title + ' Quiz';
+      document.getElementById('quiz-total').textContent = currentQuiz.length;
+      showView('quiz');
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      if (quizIndex >= currentQuiz.length) { showResults(); return; }
+      const q = currentQuiz[quizIndex];
+      document.getElementById('quiz-question-num').textContent = quizIndex + 1;
+      document.getElementById('quiz-question-text').textContent = q.question;
+      document.getElementById('quiz-progress-bar').style.width = ((quizIndex / currentQuiz.length) * 100) + '%';
+      document.getElementById('quiz-feedback').classList.add('hidden');
+      document.getElementById('btn-quiz-next').classList.add('hidden');
+
+      const opts = document.getElementById('quiz-options');
+      opts.innerHTML = '';
+      q.options.forEach(function(opt, i) {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-option-btn';
+        btn.textContent = opt;
+        btn.addEventListener('click', function() { selectAnswer(i); });
+        opts.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(idx) {
+      const q = currentQuiz[quizIndex];
+      const isCorrect = idx === q.correct;
+      if (isCorrect) quizScore++;
+      quizAnswers.push(idx);
+
+      // Disable all options
+      const btns = document.querySelectorAll('.quiz-option-btn');
+      btns.forEach(function(btn, i) {
+        btn.disabled = true;
+        if (i === q.correct) btn.classList.add('correct');
+        if (i === idx && !isCorrect) btn.classList.add('incorrect');
+      });
+
+      // Show feedback
+      const fb = document.getElementById('quiz-feedback');
+      fb.classList.remove('hidden');
+      fb.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'incorrect');
+      fb.innerHTML = '<strong>' + (isCorrect ? '✅ Correct!' : '❌ Incorrect') + '</strong><p>' + q.explanation + '</p>';
+
+      document.getElementById('btn-quiz-next').classList.remove('hidden');
+      document.getElementById('btn-quiz-next').textContent = quizIndex < currentQuiz.length - 1 ? 'Next Question →' : 'See Results →';
+    }
+
+    function nextQuestion() {
+      quizIndex++;
+      if (quizIndex >= currentQuiz.length) {
+        showResults();
+      } else {
+        renderQuestion();
+      }
+    }
+
+    function showResults() {
+      const pct = Math.round((quizScore / currentQuiz.length) * 100);
+      const passed = pct >= 70;
+
+      if (passed && !state.chaptersCompleted.includes(currentChapter.id)) {
+        state.chaptersCompleted.push(currentChapter.id);
+      }
+      state.quizScores[currentChapter.id] = pct;
+      saveState();
+
+      document.getElementById('results-icon').textContent = passed ? '🎉' : '📚';
+      document.getElementById('results-title').textContent = passed ? 'Great Job!' : 'Keep Learning!';
+      document.getElementById('results-score').textContent = 'You scored ' + quizScore + '/' + currentQuiz.length + ' (' + pct + '%)';
+      document.getElementById('btn-results-retry').style.display = passed ? 'none' : 'inline-block';
+
+      showView('quiz-results');
+    }
+
+    // --- Calculator ---
+    function fmt(n) {
+      return n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+    }
+
+    function recalculate() {
+      var salary = parseFloat(document.getElementById('calc-salary').value) || 0;
+      var trad401k = parseFloat(document.getElementById('slider-trad401k').value) || 0;
+      var roth401k = parseFloat(document.getElementById('slider-roth401k').value) || 0;
+      var afterTax401k = parseFloat(document.getElementById('slider-aftertax401k').value) || 0;
+      var hsa = parseFloat(document.getElementById('slider-hsa').value) || 0;
+      var fsa = parseFloat(document.getElementById('slider-fsa').value) || 0;
+      var esppPct = parseFloat(document.getElementById('slider-espp').value) || 0;
+
+      // Enforce combined 401k employee limit
+      var combined401k = trad401k + roth401k;
+      if (combined401k > LIMITS.employee401k) {
+        roth401k = LIMITS.employee401k - trad401k;
+        if (roth401k < 0) roth401k = 0;
+        document.getElementById('slider-roth401k').value = roth401k;
+      }
+
+      // Enforce total 401k limit
+      var total401k = trad401k + roth401k + afterTax401k + (salary > 0 ? Math.min(trad401k + roth401k, LIMITS.employee401k) * 0.5 : 0);
+      if (total401k > LIMITS.total401k) {
+        afterTax401k = Math.max(0, LIMITS.total401k - trad401k - roth401k - Math.min(trad401k + roth401k, LIMITS.employee401k) * 0.5);
+        document.getElementById('slider-aftertax401k').value = afterTax401k;
+      }
+
+      var esppAmount = salary * (esppPct / 100);
+
+      // Update displayed values
+      document.getElementById('val-trad401k').textContent = fmt(trad401k);
+      document.getElementById('val-roth401k').textContent = fmt(roth401k);
+      document.getElementById('val-aftertax401k').textContent = fmt(afterTax401k);
+      document.getElementById('val-hsa').textContent = fmt(hsa);
+      document.getElementById('val-fsa').textContent = fmt(fsa);
+      document.getElementById('val-espp').textContent = esppPct;
+
+      // Taxable income calculation
+      var preTaxDeductions = trad401k + hsa + fsa;
+      var agi = salary - preTaxDeductions;
+      var taxableIncome = Math.max(0, agi - STANDARD_DEDUCTION_2025);
+
+      var federalTax = calculateFederalTax(taxableIncome);
+      var fica = calculateFICA(salary, hsa, fsa);
+
+      // Net pay
+      var totalDeductions = trad401k + roth401k + afterTax401k + hsa + fsa + esppAmount + federalTax + fica.total;
+      var annualTakeHome = salary - totalDeductions;
+      var perPaycheck = annualTakeHome / 24;
+
+      // Render results
+      var rows = [
+        { label: 'Gross Salary', annual: salary, pp: salary/24, cls: 'gross' },
+        { label: 'Pre-Tax 401(k)', annual: -trad401k, pp: -trad401k/24, cls: 'deduction' },
+        { label: 'Roth 401(k)', annual: -roth401k, pp: -roth401k/24, cls: 'deduction' },
+        { label: 'After-Tax 401(k)', annual: -afterTax401k, pp: -afterTax401k/24, cls: 'deduction' },
+        { label: 'HSA', annual: -hsa, pp: -hsa/24, cls: 'deduction' },
+        { label: 'FSA', annual: -fsa, pp: -fsa/24, cls: 'deduction' },
+        { label: 'Federal Tax', annual: -federalTax, pp: -federalTax/24, cls: 'tax' },
+        { label: 'Social Security', annual: -fica.ss, pp: -fica.ss/24, cls: 'tax' },
+        { label: 'Medicare', annual: -fica.medicare, pp: -fica.medicare/24, cls: 'tax' },
+        { label: 'ESPP (' + esppPct + '%)', annual: -esppAmount, pp: -esppAmount/24, cls: 'deduction' },
+        { label: 'Take-Home Pay', annual: annualTakeHome, pp: perPaycheck, cls: 'total' }
+      ];
+
+      var rowsHtml = '';
+      rows.forEach(function(r) {
+        if (r.annual === 0 && r.cls === 'deduction') return;
+        var sign = r.annual < 0 ? '-' : '';
+        var sign2 = r.pp < 0 ? '-' : '';
+        rowsHtml += '<div class="result-row ' + r.cls + '">' +
+          '<span>' + r.label + '</span>' +
+          '<span>' + sign + '$' + fmt(Math.abs(r.pp)) + '</span>' +
+          '<span>' + sign + '$' + fmt(Math.abs(r.annual)) + '</span>' +
+          '</div>';
+      });
+      document.getElementById('result-rows').innerHTML = rowsHtml;
+
+      // Tax savings
+      var noContribTax = calculateFederalTax(Math.max(0, salary - STANDARD_DEDUCTION_2025));
+      var noContribFica = calculateFICA(salary, 0, 0);
+      var taxSavings = (noContribTax - federalTax) + (noContribFica.total - fica.total);
+      document.getElementById('tax-savings-box').innerHTML =
+        '<h4>💰 Annual Tax Savings</h4>' +
+        '<p class="tax-savings-amount">$' + fmt(taxSavings) + '</p>' +
+        '<p>Saved by using pre-tax contributions (401k, HSA, FSA)</p>';
+    }
+
+    // --- Target Take-Home Calculator ---
+    function calculateTarget() {
+      var salary = parseFloat(document.getElementById('calc-salary-target').value) || 0;
+      var targetMonthly = parseFloat(document.getElementById('calc-target-takehome').value) || 0;
+      var targetAnnual = targetMonthly * 12;
+
+      // Start with max contributions and reduce until target is met
+      var best = { trad401k: 0, hsa: 0, fsa: 0, espp: 0 };
+      var priorities = [
+        { key: 'trad401k', max: LIMITS.employee401k, step: 500 },
+        { key: 'hsa', max: LIMITS.hsa_individual, step: 100 },
+        { key: 'fsa', max: LIMITS.fsa, step: 100 },
+        { key: 'espp', max: Math.round(salary * 0.15), step: 500 }
+      ];
+
+      // Binary search approach: find max contributions that still meet take-home target
+      function calcTakeHome(contribs) {
+        var preTax = contribs.trad401k + contribs.hsa + contribs.fsa;
+        var agi = salary - preTax;
+        var taxable = Math.max(0, agi - STANDARD_DEDUCTION_2025);
+        var fed = calculateFederalTax(taxable);
+        var fica = calculateFICA(salary, contribs.hsa, contribs.fsa);
+        return salary - contribs.trad401k - contribs.hsa - contribs.fsa - contribs.espp - fed - fica.total;
+      }
+
+      // Start from max and reduce if needed
+      best.trad401k = LIMITS.employee401k;
+      best.hsa = LIMITS.hsa_individual;
+      best.fsa = 0;
+      best.espp = Math.round(salary * 0.10);
+
+      var takeHome = calcTakeHome(best);
+
+      if (takeHome < targetAnnual) {
+        // Need to reduce contributions
+        // Reduce in reverse priority: ESPP first, then FSA, then HSA, then 401k
+        var reductions = ['espp', 'fsa', 'hsa', 'trad401k'];
+        for (var r = 0; r < reductions.length && takeHome < targetAnnual; r++) {
+          var key = reductions[r];
+          while (best[key] > 0 && takeHome < targetAnnual) {
+            best[key] = Math.max(0, best[key] - 500);
+            takeHome = calcTakeHome(best);
+          }
+        }
+      }
+
+      var resultDiv = document.getElementById('target-result');
+      resultDiv.classList.remove('hidden');
+      resultDiv.innerHTML = '<h4>📋 Suggested Contributions</h4>' +
+        '<div class="target-row"><span>Pre-Tax 401(k)</span><span>$' + fmt(best.trad401k) + '/yr</span></div>' +
+        '<div class="target-row"><span>HSA</span><span>$' + fmt(best.hsa) + '/yr</span></div>' +
+        '<div class="target-row"><span>FSA</span><span>$' + fmt(best.fsa) + '/yr</span></div>' +
+        '<div class="target-row"><span>ESPP</span><span>$' + fmt(best.espp) + '/yr (' + Math.round(best.espp / salary * 100) + '%)</span></div>' +
+        '<div class="target-row total"><span>Est. Take-Home</span><span>$' + fmt(Math.round(takeHome / 12)) + '/mo</span></div>' +
+        '<p class="target-note">💡 Adjust these in the "Set Contributions" tab for exact amounts.</p>';
+    }
+
+    // --- Tab Switching ---
+    function setupTabs() {
+      document.querySelectorAll('.calc-tab').forEach(function(tab) {
+        tab.addEventListener('click', function() {
+          document.querySelectorAll('.calc-tab').forEach(function(t) { t.classList.remove('active'); });
+          document.querySelectorAll('.calc-panel').forEach(function(p) { p.classList.remove('active'); });
+          tab.classList.add('active');
+          var panel = document.getElementById('panel-' + tab.dataset.tab);
+          if (panel) panel.classList.add('active');
+        });
+      });
+    }
+
+    // --- Initialization ---
+    function init() {
+      loadState();
+
+      // Bottom navigation
+      document.querySelectorAll('.nav-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          showView(btn.dataset.view);
+        });
+      });
+
+      // Back button
+      document.getElementById('back-btn').addEventListener('click', function() {
+        showView('dashboard');
+      });
+
+      // Quick actions
+      document.getElementById('qa-calculator').addEventListener('click', function() { showView('calculator'); });
+      document.getElementById('qa-chapters').addEventListener('click', function() { showView('chapters'); });
+
+      // Quiz button
+      document.getElementById('btn-take-quiz').addEventListener('click', function() { startQuiz(); });
+      document.getElementById('btn-quiz-next').addEventListener('click', function() { nextQuestion(); });
+      document.getElementById('btn-results-continue').addEventListener('click', function() { showView('dashboard'); });
+      document.getElementById('btn-results-retry').addEventListener('click', function() { startQuiz(); });
+
+      // Calculator tabs
+      setupTabs();
+
+      // Sliders
+      var sliders = ['trad401k', 'roth401k', 'aftertax401k', 'hsa', 'fsa', 'espp'];
+      sliders.forEach(function(name) {
+        var slider = document.getElementById('slider-' + name);
+        if (slider) {
+          slider.addEventListener('input', function() { recalculate(); });
+        }
+      });
+
+      // Salary input
+      document.getElementById('calc-salary').addEventListener('input', function() { recalculate(); });
+
+      // Target calculator
+      document.getElementById('btn-calc-target').addEventListener('click', function() { calculateTarget(); });
+      document.getElementById('calc-salary-target').addEventListener('input', function() {
+        document.getElementById('target-result').classList.add('hidden');
+      });
+      document.getElementById('calc-target-takehome').addEventListener('input', function() {
+        document.getElementById('target-result').classList.add('hidden');
+      });
+
+      // Initial render
+      showView('dashboard');
+      recalculate();
+    }
+
+    // Start when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+  </script>
+</body>
+</html>
