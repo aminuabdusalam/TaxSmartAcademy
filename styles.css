@@ -1,19 +1,19 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --primary: #059669;
-  --primary-light: #34D399;
-  --primary-dark: #047857;
-  --accent: #4F46E5;
-  --accent-light: #EEF2FF;
+  --primary: #40826D;
+  --primary-light: #5a9c87;
+  --primary-dark: #2a5a4b;
+  --accent: #10B981;
+  --accent-light: #D1FAE5;
   --warning: #F59E0B;
   --danger: #EF4444;
-  --bg: #F0F4F3;
+  --bg: #FAF7F0;
   --card: #FFFFFF;
-  --text: #1E293B;
-  --text-secondary: #64748B;
-  --text-light: #94A3B8;
-  --border: #E2E8F0;
+  --text: #1F2A24;
+  --text-secondary: #6B6459;
+  --text-light: #9C9689;
+  --border: #EAE4D6;
   --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
   --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
   --radius: 12px;
@@ -32,9 +32,27 @@ body {
   min-height: 100dvh; overflow-x: hidden; -webkit-font-smoothing: antialiased;
 }
 
+@media (min-width: 900px) {
+  body {
+    background:
+      radial-gradient(ellipse 60vw 40vh at 50% 0%, rgba(64, 130, 109, 0.07), transparent 70%),
+      radial-gradient(ellipse 50vw 30vh at 50% 100%, rgba(64, 130, 109, 0.05), transparent 70%),
+      var(--bg);
+    background-attachment: fixed;
+  }
+}
+
 #app {
   max-width: 480px; margin: 0 auto; min-height: 100dvh;
   display: flex; flex-direction: column; position: relative;
+}
+
+@media (min-width: 900px) {
+  #app {
+    max-width: 720px;
+    background: var(--card);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.03);
+  }
 }
 
 /* TOP BAR */
@@ -156,14 +174,14 @@ body {
 .chapter-content li { margin-bottom: 6px; line-height: 1.6; }
 
 .info-card {
-  background: #F8FAF9; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: #FBF9F3; border: 1px solid var(--border); border-radius: var(--radius-sm);
   padding: 16px; margin: 16px 0;
 }
-.info-card.accent { background: #ECFDF5; border-color: #A7F3D0; }
+.info-card.accent { background: #EEF5F1; border-color: #B8D4C8; }
 .info-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
 
 .key-terms {
-  background: linear-gradient(135deg, #ECFDF5, #D1FAE5); border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, #EEF5F1, #DCEAE2); border-radius: var(--radius-sm);
   padding: 16px; margin: 16px 0;
 }
 .key-terms h3 { font-size: 1rem; font-weight: 700; margin-bottom: 10px; color: var(--primary-dark); }
@@ -192,7 +210,7 @@ body {
   text-align: left; font-family: inherit; line-height: 1.5;
 }
 .quiz-option:active { transform: scale(0.98); }
-.quiz-option.selected { border-color: var(--primary); background: #ECFDF5; }
+.quiz-option.selected { border-color: var(--primary); background: #EEF5F1; }
 .quiz-option.correct { border-color: var(--primary); background: #D1FAE5; }
 .quiz-option.incorrect { border-color: var(--danger); background: #FEE2E2; }
 .quiz-option.disabled { pointer-events: none; }
@@ -267,12 +285,12 @@ body {
 .result-row .row-label { font-weight: 500; }
 
 .tax-savings-box {
-  margin-top: 16px; background: linear-gradient(135deg, #ECFDF5, #D1FAE5);
+  margin-top: 16px; background: linear-gradient(135deg, #EEF5F1, #DCEAE2);
   border-radius: var(--radius-sm); padding: 14px;
 }
 .tax-savings-box h4 { font-size: 0.9rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 8px; }
 .tax-savings-box .savings-item { display: flex; justify-content: space-between; font-size: 0.82rem; padding: 3px 0; }
-.tax-savings-box .savings-total { display: flex; justify-content: space-between; font-size: 0.95rem; font-weight: 800; padding-top: 6px; border-top: 1px solid #A7F3D0; margin-top: 4px; color: var(--primary-dark); }
+.tax-savings-box .savings-total { display: flex; justify-content: space-between; font-size: 0.95rem; font-weight: 800; padding-top: 6px; border-top: 1px solid #B8D4C8; margin-top: 4px; color: var(--primary-dark); }
 
 .target-result {
   background: var(--card); border-radius: var(--radius-sm); padding: 16px;
@@ -303,6 +321,12 @@ body {
   height: var(--nav-height); padding-bottom: var(--safe-bottom);
   z-index: 100; box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
 }
+@media (min-width: 900px) {
+  #bottom-nav {
+    max-width: 720px;
+    box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.06);
+  }
+}
 .nav-btn {
   flex: 1; display: flex; flex-direction: column; align-items: center;
   justify-content: center; gap: 2px; background: none; border: none;
@@ -325,3 +349,179 @@ body {
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+
+/* === PWA INSTALL BANNER === */
+.install-banner {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  bottom: calc(var(--nav-height) + var(--safe-bottom) + 8px);
+  width: calc(100% - 16px);
+  max-width: 464px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 200;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.06);
+  opacity: 0;
+  transition: transform 0.28s ease, opacity 0.28s ease;
+}
+
+.install-banner.visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.install-banner.hidden {
+  display: none;
+}
+
+.install-banner-icon {
+  font-size: 2rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.install-banner-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.install-banner-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.install-banner-text {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.install-banner-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.install-btn {
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.1s ease, opacity 0.15s ease;
+}
+
+.install-btn:active {
+  transform: scale(0.97);
+}
+
+.install-btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.install-btn-primary:hover {
+  background: var(--primary-dark);
+}
+
+.install-btn-secondary {
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.install-btn-secondary:hover {
+  color: var(--text);
+}
+
+@media (min-width: 900px) {
+  .install-banner {
+    max-width: 480px;
+    bottom: calc(var(--nav-height) + var(--safe-bottom) + 16px);
+  }
+}
+
+/* === iOS INSTALL MODAL === */
+.ios-install-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(31, 42, 36, 0.55);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.ios-install-modal.visible {
+  opacity: 1;
+}
+
+.ios-install-modal.hidden {
+  display: none;
+}
+
+.ios-install-content {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 24px 20px;
+  max-width: 380px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.ios-install-close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  color: var(--text-light);
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px 8px;
+}
+
+.ios-install-close:hover {
+  color: var(--text);
+}
+
+.ios-install-content h3 {
+  margin: 0 0 12px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  padding-right: 24px;
+}
+
+.ios-install-steps {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.ios-install-steps li {
+  margin-bottom: 8px;
+}
+
+.ios-install-steps strong {
+  color: var(--text);
+}

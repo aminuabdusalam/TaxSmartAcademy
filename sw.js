@@ -1,5 +1,5 @@
-const CACHE_NAME = 'tsa-v2';
-const ASSETS = ['/', '/index.html', '/styles.css', '/data.js', '/manifest.json'];
+const CACHE_NAME = 'tsa-v4';
+const ASSETS = ['./', './index.html', './styles.css', './data.js', './manifest.json'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(ASSETS)));
@@ -11,6 +11,6 @@ self.addEventListener('activate', e => {
 });
 self.addEventListener('fetch', e => {
   e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).catch(() => {
-    if (e.request.destination === 'document') return caches.match('/index.html');
+    if (e.request.destination === 'document') return caches.match('./index.html');
   })));
 });
